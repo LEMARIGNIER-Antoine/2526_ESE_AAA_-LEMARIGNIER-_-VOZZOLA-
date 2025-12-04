@@ -16,10 +16,10 @@ Le dépôt est organisé de la manière suivante pour garantir la traçabilité 
 * `Software/` : Contient les programmes sources (ex: Arduino, Python, Ladder, etc.) développés pour les TP.
     * `TPX_Actionneur_XXX/`
 * `Ressources/` : Contient les fiches techniques, schémas ou documentation spécifique utilisés.
-
+* Lien vers le compte rendu : [Compte Rendu](Ressources/README.md)
 ---
 
-### **3. 🛠️ OBJECTIFS DU TP **
+### **3. 🛠️ OBJECTIFS DU TP**
 
 * Générer 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant le cahier des charges,
 * Inclure le temps mort,
@@ -28,17 +28,10 @@ Le dépôt est organisé de la manière suivante pour garantir la traçabilité 
 * Faire un premier essai de commande moteur.
 
 
-Cahier des charges :
-Fréquence de la PWM : 20kHz
-Temps mort minimum : à voir selon la datasheet des transistors (faire valider la valeur)
-Résolution minimum : 10bits.
-Pour les tests, fixer le rapport cyclique à 60%.
 
-On prendra donc avec une clock de 170 MHz, un ARR de 1024-1 pour avoir 10 bits  et un Prescaler de 4-1, car on a diviser par 2 le prescaler car on est en commande décalée pour avoir 20 kHz en sortie. Avec la datasheet du mosfet IRF540N, on relève un deadtime d'environ 170 ns ( reverse recovery time + rise/fall time), on prendra 200 ns donc sur l'IOC, 200/5,88( valeur datasheet)=34, on notera 34 dans le deadtime.
-Pour un rapport cyclique de 60 % il suffit de prendre 60% de l'arr soit 614, on fera une fonction pour le rapport et avoir à choisir entre 0 et 100 et ne pas prendre en compte des valeurs en dehors.
+
 On se placera en center aligned mode 1.
 Voici les photos de nos PWM.
----
 
 ### **4. 🔗 Liens Utiles**
 
