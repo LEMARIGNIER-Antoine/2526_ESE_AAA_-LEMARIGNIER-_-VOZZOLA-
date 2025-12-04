@@ -14,8 +14,8 @@ L'objectif de ce module est d'étudier, de mettre en œuvre et de rendre compte 
 
 ### **2. 🧑‍🤝‍🧑 Équipe**
 
-* **Responsable du TP/CR :** LEMARIGNIER
-* **Membre de l'équipe :** VOZZOLA
+* **Responsable du TP/CR :** Mr MARTIN
+* **Membres de l'équipe :** VOZZOLA et LEMARIGNIER
 
 ---
 
