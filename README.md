@@ -32,11 +32,23 @@ Le dépôt est organisé de la manière suivante pour garantir la traçabilité 
 
 ---
 
+### **4. 🛠️ OBJECTIFS DU TP **
+
+* Générer 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant le cahier des charges,
+* Inclure le temps mort,
+* Vérifier les signaux de commande à l'oscilloscope,
+* Prendre en main le hacheur,
+* Faire un premier essai de commande moteur.
+
+---
+
+
+
 ### **4. 🛠️ Liste des Comptes Rendus (CR) et TP**
 
 | # TP | Thème du TP | Fichier CR | Date de Rendu (Prévue) | Statut |
 | :---: | :--- | :--- | :---: | :---: |
-| TP 1 | Découverte des Actionneurs Simples (Relais, Contacteurs) | [CR_TP1_Relais.pdf](CR/CR_TP1_Relais.pdf) | JJ/MM/AAAA | ✅ Terminé |
+| TP 1 | Découverte du PCB et création des PWMs sur les 4 MOSFTES | [CR_TP1_Relais.pdf](CR/CR_TP1_Relais.pdf) | JJ/MM/AAAA | ✅ Terminé |
 | TP 2 | Étude des Moteurs DC et Hacheurs | [CR_TP2_MoteurDC.pdf](CR/CR_TP2_MoteurDC.pdf) | JJ/MM/AAAA | ⏳ En Cours |
 | TP 3 | Asservissement de Position (Servomoteur) | [CR_TP3_Servomoteur.pdf](CR/CR_TP3_Servomoteur.pdf) | JJ/MM/AAAA | ❌ À Faire |
 | TP 4 | ... | [CR_TP4_...](CR/CR_TP4_...) | JJ/MM/AAAA | ❌ À Faire |
