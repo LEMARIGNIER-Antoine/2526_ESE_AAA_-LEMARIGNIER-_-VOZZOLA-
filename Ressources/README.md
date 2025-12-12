@@ -24,4 +24,18 @@ Nous avons rajouté Start et Stop qui peuvent être appelé depuis le Shell.
 
 ### 7.2. Mesure de courant
 
+- Définir quel(s) courant(s) vous devez mesurer? Pour la mesure du courant, nous allons mesurer la courant total qui passe dans le moteur
+
+
+
+- Définir les fonctions de transfert des capteurs de mesure de courant (lecture datasheet)? En regardant la datasheet / Kicad, on se rend compte les capteurs utilisés sont des 61-GO10-SME de chez LEM avec notamment un courant RMS de 10 A et on aura :
+$I=\frac{V_{mesuré}-1.65}{0.05}$
+
+Déterminer les pin du stm32 utilisés pour faire ces mesures de courant,
+
+Etablir une première mesure de courant avec les ADC en Pooling. Faites des tests à vitesse nulle, non nulle, et en charge (rajouter un couple resistif en consommant du courant sur la machine synchrone couplée à la MCC).
+
+Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. 
+
+Vous pouvez utiliser le même timer que celui de la génération des PWM pour que les mesures de courant soient synchrones aux PWM. Pour vérifier cela, utiliser un GPIO disponible sur la carte pour établir une impulsion lors de la mesure de la valeur.
 ### 7.3. Mesure de vitesse
