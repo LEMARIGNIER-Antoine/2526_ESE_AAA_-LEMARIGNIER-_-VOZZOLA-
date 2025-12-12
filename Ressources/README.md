@@ -41,5 +41,8 @@ Avec un SETCCR=65%
 
 Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. 
 
+<img width="1024" height="600" alt="SDS2104X Plus_PNG_39" src="https://github.com/user-attachments/assets/4c450560-2e65-4df5-a422-612ecea3b930" />
+
+
 Vous pouvez utiliser le même timer que celui de la génération des PWM pour que les mesures de courant soient synchrones aux PWM. Pour vérifier cela, utiliser un GPIO disponible sur la carte pour établir une impulsion lors de la mesure de la valeur.
 ### 7.3. Mesure de vitesse
