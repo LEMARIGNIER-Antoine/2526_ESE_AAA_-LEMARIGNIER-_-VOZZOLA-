@@ -31,7 +31,7 @@ Nous avons rajouté Start et Stop qui peuvent être appelé depuis le Shell.
 - Définir les fonctions de transfert des capteurs de mesure de courant (lecture datasheet)? En regardant la datasheet / Kicad, on se rend compte les capteurs utilisés sont des 61-GO10-SME de chez LEM avec notamment un courant RMS de 10 A et on aura :
 $I=\frac{V_{mesuré}-1.65}{0.05}$
 
-Déterminer les pin du stm32 utilisés pour faire ces mesures de courant,
+- Déterminer les pin du stm32 utilisés pour faire ces mesures de courant ? D'après le kicad, la lecture du couant pour U sera sur PA1 , V sera sur PB2 et W sera sur PB13
 
 Etablir une première mesure de courant avec les ADC en Pooling. Faites des tests à vitesse nulle, non nulle, et en charge (rajouter un couple resistif en consommant du courant sur la machine synchrone couplée à la MCC).
 
