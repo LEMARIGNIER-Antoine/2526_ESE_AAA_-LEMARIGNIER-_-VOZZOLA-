@@ -36,7 +36,7 @@ $I=\frac{V_{mesuré}-1.65}{0.05}$
 
 Etablir une première mesure de courant avec les ADC en Pooling. Faites des tests à vitesse nulle, non nulle, et en charge (rajouter un couple resistif en consommant du courant sur la machine synchrone couplée à la MCC).
 <img width="1876" height="1014" alt="image" src="https://github.com/user-attachments/assets/114576a1-b2cc-4b43-948a-5a152cdc348a" />
-
+Avec un SETCCR=65%
 <img width="314" height="78" alt="image" src="https://github.com/user-attachments/assets/cf98d527-54a4-48a2-96b1-73c3c6a37ff8" />
 
 Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. 
