@@ -32,6 +32,7 @@ Nous avons rajouté Start et Stop qui peuvent être appelé depuis le Shell.
 $I=\frac{V_{mesuré}-1.65}{0.05}$
 
 - Déterminer les pin du stm32 utilisés pour faire ces mesures de courant ? D'après le kicad, la lecture du couant pour U sera sur PA1 , V sera sur PB2 et W sera sur PB13
+<img width="1646" height="1378" alt="image" src="https://github.com/user-attachments/assets/9e49453c-91f5-4c4e-8b58-4d8a04628d6d" />
 
 Etablir une première mesure de courant avec les ADC en Pooling. Faites des tests à vitesse nulle, non nulle, et en charge (rajouter un couple resistif en consommant du courant sur la machine synchrone couplée à la MCC).
 
