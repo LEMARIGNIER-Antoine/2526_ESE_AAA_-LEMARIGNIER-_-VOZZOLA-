@@ -19,6 +19,8 @@ Pour un rapport cyclique de 60 % il suffit de prendre 60% de l'arr soit 614, on 
 ## 7. Commande en boucle ouverte, mesure de Vitesse et de courant
 
 ### 7.1. Commande de la vitesse
+Nous avons rajouté Start et Stop qui peuvent être appelé depuis le Shell.
+<img width="762" height="242" alt="image" src="https://github.com/user-attachments/assets/fe53671e-5ad0-45dc-91b5-07efd2df8bbb" />
 
 ### 7.2. Mesure de courant
 
