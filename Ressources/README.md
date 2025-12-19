@@ -48,5 +48,9 @@ Vous pouvez utiliser le même timer que celui de la génération des PWM pour qu
 ### 7.3. Mesure de vitesse
 Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, on fait tourner notre moteur, on relève 13 V entre Vt+ et Vt- donc 1300 tr/min donc 21,6tr/s avec une fréquence sur notre pin PA6 = encodeur A, f=21,8 kHz et donc on a 1024 point/tr, on s'est placé en quadrature donc on multiplira par 4.
 
+Déterminer la constant de temps mécanique du moteur :
+<img width="1024" height="600" alt="SDS2104X Plus_PNG_80" src="https://github.com/user-attachments/assets/923df351-cfd3-4853-b2b4-ea37682bb63a" />
+3 tau = 260 ms donc tau = 87ms
+
 Déterminer la fréquence à laquelle vous allez faire l'asservissement en vitesse du moteur :
 20kHz.
