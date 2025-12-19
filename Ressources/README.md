@@ -59,5 +59,7 @@ On prendra donc 100 Hz, respectant Shannon.
 Déterminer les pin du stm32 utilisées pour faire cette mesure de vitesse, sur le datasheet : 
 
 Enc_A=PA6
+
 Enc_B=PA4
+
 Enc_Z=PC8
