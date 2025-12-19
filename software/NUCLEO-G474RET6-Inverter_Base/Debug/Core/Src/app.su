@@ -1,0 +1,9 @@
+../Core/Src/app.c:29:6:init_device	8	static
+../Core/Src/app.c:65:9:shell_uart2_transmit	16	static
+../Core/Src/app.c:71:9:shell_uart2_receive	16	static
+../Core/Src/app.c:77:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/app.c:85:6:loop	4	static
+../Core/Src/app.c:88:12:sh_set_ccr	56	static
+../Core/Src/app.c:114:12:sh_start	40	static
+../Core/Src/app.c:133:12:sh_stop	32	static
+../Core/Src/app.c:146:12:sh_get_current	48	static

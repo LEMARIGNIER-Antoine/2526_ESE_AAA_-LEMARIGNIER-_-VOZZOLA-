@@ -1,0 +1,2 @@
+../Core/Src/motor_control/motor.c:13:6:motor_init	1
+../Core/Src/motor_control/motor.c:27:6:Motor_SetDutyCycle	2

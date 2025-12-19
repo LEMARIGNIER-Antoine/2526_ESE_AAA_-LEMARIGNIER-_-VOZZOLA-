@@ -1,0 +1,2 @@
+../Core/Src/acquisition/input_analog.c:26:6:input_analog_init	8	static
+../Core/Src/acquisition/input_analog.c:56:6:ADC_Process_DMA_Conversion	24	static
