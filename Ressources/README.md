@@ -51,6 +51,7 @@ Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, on
 Déterminer la constant de temps mécanique du moteur :
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_80" src="https://github.com/user-attachments/assets/923df351-cfd3-4853-b2b4-ea37682bb63a" />
 3 tau = 260 ms donc tau = 87ms
+Donc la fréquence est d'environ 10 Hz
 
 Déterminer la fréquence à laquelle vous allez faire l'asservissement en vitesse du moteur :
-20kHz.
+On prendra donc 100 Hz, respectant Shannon.
