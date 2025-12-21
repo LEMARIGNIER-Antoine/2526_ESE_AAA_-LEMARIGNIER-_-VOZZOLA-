@@ -96,8 +96,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-	init_device();
-	INIT_PWM();
+  init_device();
+  INIT_PWM();
 	//SET_PWM(0.6f);
 	//SET_PWM(0.9f);
   /* USER CODE END 2 */

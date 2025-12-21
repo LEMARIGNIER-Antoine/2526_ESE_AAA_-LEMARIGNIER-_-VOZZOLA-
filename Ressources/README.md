@@ -1,20 +1,145 @@
+## 5. Shell
+
+Jusqu'ici, nous prenons en main le shell et la strcuture globale du projet Cube IDE.
+On le verra par la suite mais le shell va nous être très utile ! Notamment pour changer facilement la vitesse du moteur
+
 ## 6. Commande MCC basique 
 
 ### 6.1 Génération de 4 PWM
 
 Cahier des charges :
+
 Fréquence de la PWM : 20kHz
-Temps mort minimum : à voir selon la datasheet des transistors (faire valider la valeur)
+
+Temps mort minimum : à voir selon la datasheet des transistors
+
 Résolution minimum : 10bits.
-Pour les tests, fixer le rapport cyclique à 60%.
 
-On prendra donc avec une clock de 170 MHz, un ARR de 1024-1 pour avoir 10 bits  et un Prescaler de 4-1, car on a diviser par 2 le prescaler car on est en commande décalée pour avoir 20 kHz en sortie. Avec la datasheet du mosfet IRF540N, on relève un deadtime d'environ 170 ns ( reverse recovery time + rise/fall time), on prendra 200 ns donc sur l'IOC, 200/5,88( valeur datasheet)=34, on notera 34 dans le deadtime.
+Notre nucléo STM32G474 peut être cadencé au maximum à 170MHz. On décide donc de travailler à cette fréquence et par conséquent on peut régler les paramètres de notre timer pour obtenir au moins 20kHz au borne du moteur avec une commande complémentaire décalée :
 
-Pour un rapport cyclique de 60 % il suffit de prendre 60% de l'arr soit 614, on fera une fonction pour le rapport et avoir à choisir entre 0 et 100 et ne pas prendre en compte des valeurs en dehors.
+- En suivant la théorie, il faut que la commutation de nos MOSFET soit 2 fois supérieur à celle dans le moteur. De plus, on veut une précision d'au moins 10 bits. Par conséquent, on choisit PSC = 4 - 1 et ARR = 1024 - 1. On aura une fréquence de commutation MOSFET à 55 392Hz et du moteur à 27 696Hz > 20 000Hz.
+<p align="center">
+  <img src="../IMG/theorie_compl.png" width="400">
+</p>
+
+- Pour éviter de court-circuiter la carte, nous allons devoir imposer des deadtimes entre les commutations. D'après la datasheet des MOSFET (IRF540N),on relève un deadtime d'environ 170 ns ( reverse recovery time + rise/fall time).On prendra 200 ns donc sur l'IOC, 200/5,88( valeur datasheet)=34, on notera 34 dans le deadtime.
+<p align="center">
+  <img src="../IMG/DEADTIME.png" width="400">
+</p>
+
+Pour un rapport cyclique de 60 % il suffit de prendre 60% de l'ARR soit 614.
+
+
+On peut alors tester tout cela avant de brancher le moteur :
+<p align="center">
+  <img src="../IMG/tek00001.png" width="800">
+</p>
+
+Le rapport cyclique est bien mis à 60%. On peut donc brancher le moteur et constaté que ça tourne correctement !
 
 ### 6.2. Commande de vitesse
 
+Pour se faire, nous réaliser une fonction qui nous permet de changer facilement le PWM grâce au shell :
+
+<div style="display: flex; gap: 40px;">
+
+<div style="flex: 1;">
+<pre>
+<code class="language-c">
+void Motor_SetDutyCycle(uint16_t ccr_value)
+{
+    // clamping
+    if (ccr_value > MOTOR_CCR_MAX) {
+        ccr_value = MOTOR_CCR_MAX;
+    }
+
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ccr_value);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, MOTOR_CCR_MAX - ccr_value);
+}
+</code>
+</pre>
+</div>
+
+<div style="flex: 1;">
+<pre>
+<code class="language-c">
+static int sh_set_ccr(h_shell_t* h_shell, int argc, char** argv)
+{
+    // Vérification de l'argument
+    if (argc < 2) {
+        int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE,
+                            "Erreur: Argument manquant. Usage: SETCCR <0-100>\\r\\n");
+        h_shell->drv.transmit(h_shell->print_buffer, size);
+        return -1;
+    }
+
+    int user_percent = atoi(argv[1]);
+
+    if (user_percent < 0 || user_percent > 100) {
+        int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE,
+                            "Erreur: Valeur %d invalide. Entrez une valeur entre 0 et 100.\\r\\n",
+                            user_percent);
+        h_shell->drv.transmit(h_shell->print_buffer, size);
+        return -1;
+    }
+
+    uint16_t ccr_register_value = (uint16_t)(((uint32_t)user_percent * MOTOR_CCR_MAX) / 100);
+
+    Motor_SetDutyCycle(ccr_register_value);
+
+    int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE,
+                        "OK: Vitesse reglee a %d%% (Reg: %d/%d)\\r\\n",
+                        user_percent, ccr_register_value, MOTOR_CCR_MAX);
+    h_shell->drv.transmit(h_shell->print_buffer, size);
+
+    return 0;
+}
+</code>
+</pre>
+</div>
+
+</div>
+
 ### 6.3. Premiers tests
+
+On réalise le test, d'abord à 50 % puis à 70 %. On constate un problème ! Lors du changement de vitesse, le courant augmente très rapidement et le moteur démarre de façon très sèche. 
+
+Cela vient du fait que nous lui envoyons un échalon de tension "instantané" ce qui provoque la montée en flêche du courant et donc une mauvais démarrage. Pour remédier à cela, nous pouvons réaliser une fonction rample qui va permetre de faire monter doucement la tension donc la vitesse et donc le courant :
+```C
+void motor_ramp(uint16_t target_ccr)
+{
+    // Sécurisation de la valeur cible
+    if (target_ccr > MOTOR_CCR_MAX) {
+        target_ccr = MOTOR_CCR_MAX;
+    }
+
+    // Lecture de la valeur actuelle (approximation)
+    uint16_t current_ccr = __HAL_TIM_GET_COMPARE(&htim1, TIM_CHANNEL_1);
+
+    if (current_ccr < target_ccr)
+    {
+        // Rampe montée
+        for (uint16_t ccr = current_ccr; ccr <= target_ccr; ccr += MOTOR_RAMP_STEP)
+        {
+            Motor_SetDutyCycle(ccr);
+            HAL_Delay(MOTOR_RAMP_DELAY);
+        }
+    }
+    else
+    {
+        // Rampe descente
+        for (uint16_t ccr = current_ccr; ccr >= target_ccr; ccr -= MOTOR_RAMP_STEP)
+        {
+            Motor_SetDutyCycle(ccr);
+            HAL_Delay(MOTOR_RAMP_DELAY);
+            if (ccr < MOTOR_RAMP_STEP) break; // éviter underflow
+        }
+    }
+
+    // Assurer que la valeur finale est exacte
+    Motor_SetDutyCycle(target_ccr);
+}
+```
 
 ## 7. Commande en boucle ouverte, mesure de Vitesse et de courant
 
