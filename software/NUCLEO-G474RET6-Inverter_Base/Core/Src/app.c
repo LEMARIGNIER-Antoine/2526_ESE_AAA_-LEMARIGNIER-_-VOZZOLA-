@@ -11,6 +11,7 @@
 #include <stdlib.h> //atoi
 #include <stdio.h>  //snprintf
 #include "acquisition/input_analog.h"
+#include "acquisition/input_encoder.h"
 
 extern TIM_HandleTypeDef htim1;
 
@@ -24,6 +25,7 @@ static int sh_set_ccr(h_shell_t* h_shell, int argc, char** argv);
 static int sh_start(h_shell_t* h_shell, int argc, char** argv);
 static int sh_stop(h_shell_t* h_shell, int argc, char** argv);
 static int sh_get_current(h_shell_t* h_shell, int argc, char** argv);
+static int sh_get_encoder(h_shell_t* h_shell, int argc, char** argv);
 
 
 void init_device(void){
@@ -39,6 +41,7 @@ void init_device(void){
 	shell_add(&hshell1, "START", sh_start, "Start PWM a 50%");
 	shell_add(&hshell1, "STOP", sh_stop, "Desactive PWM");
 	shell_add(&hshell1, "IMES", sh_get_current, "Affiche le courant mesuré en Ampères");
+	shell_add(&hshell1, "ENC", sh_get_encoder, "Affiche la valeur de l'encodeur");
 
 	// LED
 	led_init();
@@ -59,7 +62,7 @@ void init_device(void){
 	// ANALOG INPUT
 	input_analog_init();
 	// ENCODER INPUT
-	//	input_encoder_init();
+	input_encoder_init();
 }
 
 uint8_t shell_uart2_transmit(const char *pData, uint16_t size)
@@ -146,8 +149,22 @@ static int sh_stop(h_shell_t* h_shell, int argc, char** argv)
 static int sh_get_current(h_shell_t* h_shell, int argc, char** argv)
 {
 
-    int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE, "Courant = %.2f A\r\n", I_mes);
-    h_shell->drv.transmit(h_shell->print_buffer, size);
+	int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE, "Courant = %.2f A\r\n", I_mes);
+	h_shell->drv.transmit(h_shell->print_buffer, size);
 
-    return 0;
+	return 0;
+}
+
+static int sh_get_encoder(h_shell_t* h_shell, int argc, char** argv)
+{
+
+	int32_t nb_tours = encoder_get_tours();
+	uint32_t cnt_actuel = encoder_get_counter();
+
+
+	int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE, "Tours: %ld | CNT: %lu \r\n", nb_tours, cnt_actuel);
+
+	h_shell->drv.transmit(h_shell->print_buffer, size);
+
+	return 0;
 }

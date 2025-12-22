@@ -57,11 +57,11 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(NRST_SafetyUC_GPIO_Port, NRST_SafetyUC_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : USR_BTN_Pin */
-  GPIO_InitStruct.Pin = USR_BTN_Pin;
+  /*Configure GPIO pins : USR_BTN_Pin PC8 */
+  GPIO_InitStruct.Pin = USR_BTN_Pin|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USR_BTN_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USR_LED_Pin */
   GPIO_InitStruct.Pin = USR_LED_Pin;

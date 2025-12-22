@@ -1,0 +1,4 @@
+../Core/Src/acquisition/input_encoder.c:15:6:input_encoder_init	8	static
+../Core/Src/acquisition/input_encoder.c:20:6:encoder_interrupt	4	static
+../Core/Src/acquisition/input_encoder.c:26:9:encoder_get_tours	4	static
+../Core/Src/acquisition/input_encoder.c:31:10:encoder_get_counter	4	static
