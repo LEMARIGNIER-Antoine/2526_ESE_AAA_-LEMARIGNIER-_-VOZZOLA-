@@ -166,6 +166,59 @@ Avec un SETCCR=65%
 
 Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. Vous pouvez utiliser le même timer que celui de la génération des PWM pour que les mesures de courant soient synchrones aux PWM. Pour vérifier cela, utiliser un GPIO disponible sur la carte pour établir une impulsion lors de la mesure de la valeur.
 
+Pour lire le courant en DMA, on active le DMA sur l'adc, on fera un adc request et mettons le en mode circulaire :
+<img width="776" height="526" alt="image" src="https://github.com/user-attachments/assets/9681768e-407e-4d67-95c6-10b61dcfcaea" />
+
+On vérifie bien la résolution de l'adc pour nos mesures ( 4096 bits) :
+<img width="958" height="44" alt="image" src="https://github.com/user-attachments/assets/e6cfd313-c583-4bc0-916d-5301815324aa" />
+
+Prenons 10 valeurs et prenons le timer 1, celui de la génération de nos PWM comme trigger : 
+<img width="1338" height="72" alt="image" src="https://github.com/user-attachments/assets/70dc111d-82d8-4b37-b845-ee169f551313" />
+
+Activons aussi les interrupt sur l'ADC :
+<img width="1600" height="134" alt="image" src="https://github.com/user-attachments/assets/89dad87b-39e4-4582-ba2f-a8ad3be2b22e" />
+
+Ensuite, tout se passe dans le fichier suivant : input_analog.c
+Voici le lien : https://github.com/LEMARIGNIER-Antoine/2526_ESE_AAA_-LEMARIGNIER-_-VOZZOLA-/blob/6fa8813b0fa559404555195125f8e4c78d4af746/software/NUCLEO-G474RET6-Inverter_Base/Core/Src/acquisition/input_analog.c
+
+Nous avons une fonction pour iniatialiser l'analog, nous ferrons une calibration sur l'ADC et nous ferrons un start en DMA et sur le timer qui nous sert de trigger :
+
+```c
+void input_analog_init(void){
+	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+	HAL_ADC_Start_DMA(&hadc1, (uint16_t*)&adc_dma_buffer, 10);
+	HAL_TIM_Base_Start(&htim1);
+}
+```
+Créeons la fonction principale de lecture de nos valeurs qui reprend la fonction de transfert du capteur de courant ( toutes nos variables utilisés sont définies en amont ou dans la fonction, elles n'apparaissent pas sans être définies mais par soucis de lisibilité, montrons le coeur du sujet ): Nous faisons une moyenne sur 10 valeurs lues en DMA.
+
+```c
+void ADC_Process_DMA_Conversion(void)
+{
+	float Uout = 0.0f;
+	int i=0;
+	float sum=0;
+
+	for (int i=0;i<10;i++)
+	{
+		Uout = ((float)adc_dma_buffer[i] * V_SUPPLY) / ADC_RESOLUTION;
+		sum=sum+Uout;
+	}
+	sum=sum/10.0;
+
+	if (flag_init == 0)
+	{
+		SENSOR_OFFSET = sum ;
+		flag_init = 1;
+
+	}
+
+	I_mes = (sum - SENSOR_OFFSET) / SENSOR_SENS;
+
+}
+```
+
+
 Voici une photo de notre courant : 
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_39" src="https://github.com/user-attachments/assets/4c450560-2e65-4df5-a422-612ecea3b930" />
 
