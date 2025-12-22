@@ -222,14 +222,33 @@ void ADC_Process_DMA_Conversion(void)
 Voici une photo de notre courant : 
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_39" src="https://github.com/user-attachments/assets/4c450560-2e65-4df5-a422-612ecea3b930" />
 
+Nous avons aussi ajouté la possibilité de lire la valeur avec le shell :
+dans la fonction init_device :
+```c
+shell_add(&hshell1, "IMES", sh_get_current, "Affiche le courant mesuré en Ampères");
+```
+et sa fonction associé :
+```c
+static int sh_get_current(h_shell_t* h_shell, int argc, char** argv)
+{
+
+	int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE, "Courant = %.2f A\r\n", I_mes);
+	h_shell->drv.transmit(h_shell->print_buffer, size);
+
+	return 0;
+}
+```
 
 ### 7.3. Mesure de vitesse
-Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, on fait tourner notre moteur, on relève 13 V entre Vt+ et Vt- donc 1300 tr/min donc 21,6tr/s avec une fréquence sur notre pin PA6 = encodeur A, f=21,8 kHz et donc on a 1024 point/tr, on s'est placé en quadrature donc on multiplira par 4.
+Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, branchons un voltmètre entre Vt+ et Vt-, on fait tourner notre moteur, on relève 13 V entre Vt+ et Vt- donc en comparant avec la donnée relevée sur l'encodeur, nous sommees donc avec 13 V à 1300 tr/min donc 21,6tr/s avec une fréquence sur notre pin PA6 = encodeur A de f=21,8 kHz ( valeur lue avec l'oscilloscope), nous avons donc finalement une résolution de 1024 point/tr, nous nous placerons en quadrature donc on multiplira par 4.
+<img width="646" height="78" alt="image" src="https://github.com/user-attachments/assets/837bcc47-fa3c-4b05-bfc5-0e95a5f6ed6d" />
+
 
 Déterminer la constant de temps mécanique du moteur :
+Prenons un oscilloscope et regardons sur le pin PA6 la réponse indicielle :
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_80" src="https://github.com/user-attachments/assets/923df351-cfd3-4853-b2b4-ea37682bb63a" />
-3 tau = 260 ms donc tau = 87ms
-Donc la fréquence est d'environ 10 Hz
+Regardons pour 3 tau, nous relevons 260 ms donc tau = 87ms
+Donc la fréquence qui est l'inverse de tau est d'environ 10 Hz ce qui est raisonnable.
 
 Déterminer la fréquence à laquelle vous allez faire l'asservissement en vitesse du moteur :
 On prendra donc 100 Hz, respectant Shannon.
@@ -241,3 +260,34 @@ Enc_A=PA6
 Enc_B=PA4
 
 Enc_Z=PC8
+
+En regardant l'IOC, cela nous aménera à utiliser le timer 3. Plaçons le en mode encoder :
+
+<img width="636" height="46" alt="image" src="https://github.com/user-attachments/assets/b701732e-6029-4c40-a59a-54b627fa575b" />
+
+Les fonctions de l'encoder seront instanciés dans le fichier suivant : input_encoder.c disponible ici :
+
+On initialisera notre timer et dans la librairie HAL, __HAL_TIM_GET_COUNTER(&htim3); permet de counter ce qui est très pratique.
+
+Nous avons aussi ajouté la possibilité de lire la valeur avec le shell :
+dans la fonction init_device :
+```c
+shell_add(&hshell1, "ENC", sh_get_encoder, "Affiche la valeur de l'encodeur");
+```
+avec sa fonction :
+```c
+static int sh_get_encoder(h_shell_t* h_shell, int argc, char** argv)
+{
+
+	uint32_t cnt_actuel = encoder_get_counter();
+
+
+	int size = snprintf(h_shell->print_buffer, SHELL_PRINT_BUFFER_SIZE, " CNT: %lu \r\n", nb_tours, cnt_actuel);
+
+	h_shell->drv.transmit(h_shell->print_buffer, size);
+
+	return 0;
+}
+```
+
+
