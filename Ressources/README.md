@@ -164,12 +164,12 @@ Etablir une première mesure de courant avec les ADC en Pooling. Faites des test
 Avec un SETCCR=65%
 <img width="314" height="78" alt="image" src="https://github.com/user-attachments/assets/cf98d527-54a4-48a2-96b1-73c3c6a37ff8" />
 
-Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. 
+Une fois cette mesure validée, modifier la méthode d'acquisition de ces données en établissant une mesure à interval de temps régulier avec la mise en place d'une la chaine d'acquisition Timer/ADC/DMA. Vous pouvez utiliser le même timer que celui de la génération des PWM pour que les mesures de courant soient synchrones aux PWM. Pour vérifier cela, utiliser un GPIO disponible sur la carte pour établir une impulsion lors de la mesure de la valeur.
 
+Voici une photo de notre courant : 
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_39" src="https://github.com/user-attachments/assets/4c450560-2e65-4df5-a422-612ecea3b930" />
 
 
-Vous pouvez utiliser le même timer que celui de la génération des PWM pour que les mesures de courant soient synchrones aux PWM. Pour vérifier cela, utiliser un GPIO disponible sur la carte pour établir une impulsion lors de la mesure de la valeur.
 ### 7.3. Mesure de vitesse
 Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, on fait tourner notre moteur, on relève 13 V entre Vt+ et Vt- donc 1300 tr/min donc 21,6tr/s avec une fréquence sur notre pin PA6 = encodeur A, f=21,8 kHz et donc on a 1024 point/tr, on s'est placé en quadrature donc on multiplira par 4.
 
