@@ -266,6 +266,7 @@ En regardant l'IOC, cela nous aménera à utiliser le timer 3. Plaçons le en mo
 <img width="636" height="46" alt="image" src="https://github.com/user-attachments/assets/b701732e-6029-4c40-a59a-54b627fa575b" />
 
 Les fonctions de l'encoder seront instanciés dans le fichier suivant : input_encoder.c disponible ici :
+https://github.com/LEMARIGNIER-Antoine/2526_ESE_AAA_-LEMARIGNIER-_-VOZZOLA-/blob/733ccdf04a4a6cdad2b4eca7dd3fb6a5cb4f20d9/software/NUCLEO-G474RET6-Inverter_Base/Core/Src/acquisition/input_encoder.c
 
 On initialisera notre timer et dans la librairie HAL, __HAL_TIM_GET_COUNTER(&htim3); permet de counter ce qui est très pratique.
 
