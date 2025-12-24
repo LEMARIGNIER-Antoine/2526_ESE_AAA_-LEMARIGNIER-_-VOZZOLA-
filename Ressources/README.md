@@ -247,11 +247,12 @@ Déterminons le PPR de notre encodeur. On relève sur l'encodeur 10V/1000 tr, br
 Déterminer la constant de temps mécanique du moteur :
 Prenons un oscilloscope et regardons sur le pin PA6 la réponse indicielle :
 <img width="1024" height="600" alt="SDS2104X Plus_PNG_80" src="https://github.com/user-attachments/assets/923df351-cfd3-4853-b2b4-ea37682bb63a" />
-Regardons pour 3 tau, nous relevons 260 ms donc tau = 87ms
-Donc la fréquence qui est l'inverse de tau est d'environ 10 Hz ce qui est raisonnable.
+Regardons pour 3 tau, nous relevons 260 ms donc tau = 87ms. On constate de plus que la réponse temporelle est similaire à un premier ordre (pente à l'origine non nulle), donc on peut en déduire la fréquence de coupure :
+
+$f_c = \frac{1}{2\pi \tau} = 1.83 Hz$
 
 Déterminer la fréquence à laquelle vous allez faire l'asservissement en vitesse du moteur :
-On prendra donc 100 Hz, respectant Shannon.
+Pour respecter Shannon, nous devons prendre une fréquence supérieur à 4 Hz , on peut donc prendre 100Hz 
 
 Déterminer les pin du stm32 utilisées pour faire cette mesure de vitesse, sur le datasheet : 
 
