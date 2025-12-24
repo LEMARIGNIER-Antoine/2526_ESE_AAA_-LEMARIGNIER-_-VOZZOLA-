@@ -252,6 +252,7 @@ Regardons pour 3 tau, nous relevons 260 ms donc tau = 87ms. On constate de plus 
 $f_c = \frac{1}{2\pi \tau} = 1.83 Hz$
 
 Déterminer la fréquence à laquelle vous allez faire l'asservissement en vitesse du moteur :
+
 Pour respecter Shannon, nous devons prendre une fréquence supérieur à 4 Hz , on peut donc prendre 100Hz 
 
 Déterminer les pin du stm32 utilisées pour faire cette mesure de vitesse, sur le datasheet : 
